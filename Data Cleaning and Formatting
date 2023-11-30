@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Replace 'input.csv' with the actual path to your CSV file
+INPUT_FILE="input.csv"
+
+# Remove duplicates based on the first column (assuming it's an ID)
+awk '!seen[$1]++' $INPUT_FILE > temp.csv
+
+# Fix formatting issues (e.g., removing extra spaces)
+sed -i 's/ *//g' temp.csv
+
+# Handling missing values (replace empty fields with "N/A")
+awk -F',' '{ for (i=1; i<=NF; i++) if ($i=="") $i="N/A" }1' OFS=',' temp.csv > cleaned_data.csv
+
+# Display the cleaned and formatted data
+echo "Cleaned and Formatted Data:"
+cat cleaned_data.csv
+
+# Additional processing or analysis can be added based on your requirements
+
+chmod +x clean_data.sh
+
+./clean_data.sh
