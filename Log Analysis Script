@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Replace 'access.log' with the actual path to your log file
+LOG_FILE="access.log"
+
+# Extract IP addresses, timestamps, and HTTP response codes
+grep -E -o "([0-9]{1,3}\.){3}[0-9]{1,3}" $LOG_FILE | \
+awk '{ ip_count[$1]++; } \
+     { timestamp_count[$4]++; } \
+     { http_code_count[$9]++; }'
+
+# Print IP address summary
+echo "IP Address Summary:"
+for ip in "${!ip_count[@]}"; do
+    echo "$ip: ${ip_count[$ip]} requests"
+done
+
+# Print Timestamp summary
+echo -e "\nTimestamp Summary:"
+for timestamp in "${!timestamp_count[@]}"; do
+    echo "$timestamp: ${timestamp_count[$timestamp]} requests"
+done
+
+# Print HTTP Response Code summary
+echo -e "\nHTTP Response Code Summary:"
+for code in "${!http_code_count[@]}"; do
+    echo "$code: ${http_code_count[$code]} responses"
+done
+
+# Additional analysis or metrics can be added based on your requirements
+
+chmod +x log_analysis.sh
+
+./log_analysis.sh
+
+
