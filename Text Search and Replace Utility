@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <search_pattern> <replace_pattern>"
+    exit 1
+fi
+
+# Assign the provided arguments to variables
+SEARCH_PATTERN=$1
+REPLACE_PATTERN=$2
+
+# Replace the search pattern with the replace pattern in all text files in the current directory
+grep -rl "$SEARCH_PATTERN" ./* | while read -r FILE; do
+    # Use SED to perform the replacement in-place
+    sed -i "s/$SEARCH_PATTERN/$REPLACE_PATTERN/g" "$FILE"
+    echo "Replaced '$SEARCH_PATTERN' with '$REPLACE_PATTERN' in $FILE"
+done
+
+echo "Search and replace completed."
+
+chmod +x search_replace.sh
+
+./search_replace.sh "pattern_to_search" "replacement_pattern"
